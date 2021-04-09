@@ -1,0 +1,23 @@
+def Trainset_format(df, timeColumn_name, valueColumn_name, filename):
+    df_1 = df.loc[:,[timeColumn_name, valueColumn_name]]
+    df_1['series'] = 'series_a'
+    df_1[timeColumn_name] = pd.to_datetime(df_1[timeColumn_name]).dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    df_1['label'] = 0
+    df_1 = df_1[['series', timeColumn_name, valueColumn_name, 'label']]
+
+    df_2 = df.loc[:,[timeColumn_name, valueColumn_name]]
+    df_2['series'] = 'series_b'
+    df_2[timeColumn_name] = pd.to_datetime(df_2[timeColumn_name]).dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
+    df_2['label'] = 0
+    df_2 = df_2[['series', timeColumn_name, valueColumn_name, 'label']]
+
+    aa = pd.concat([df_1, df_2], axis=0)
+
+    aa_temp = aa.sort_values(by=timeColumn_name)
+    aa_temp[valueColumn_name] = aa_temp[valueColumn_name].fillna(1)
+
+    df_to_trainset = aa_temp.iloc[:,:-1]
+    df_to_trainset[timeColumn_name] = pd.to_datetime(df_to_trainset[timeColumn_name]).dt.strftime('%Y-%m-%dT%H:%M:%SZ')
+    df_to_trainset.to_csv(filename, index=False)
+    
+    print (df_to_trainset.head(5))
