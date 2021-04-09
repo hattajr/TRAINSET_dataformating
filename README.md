@@ -1,2 +1,2 @@
 # TRAINSET_dataformating
-Preparing data to match with TRAINSET labeling
+Preparing data to match with TRAINSET labeling format
